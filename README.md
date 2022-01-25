@@ -104,3 +104,46 @@ Comparison of original array and sparse array:</br>
 1    2    1
 2    3    2
 ```
+
+Now convert the sparse back to original array.
+First read top row to get number of rows and cols of the original array:
+```java
+int rows = sparse[0][0];
+int cols = sparse[0][1];
+```
+
+Create the array using the given size.</br>
+Here the repeating value is 0. As the default value when creating an array, we do not need to deliberately fill in.
+```java
+int[][] original = new int[rows][cols];
+```
+
+Read other rows and assign values to cells:
+```java
+// skip top row
+for (int i = 1 ; i < sparse.length ; i++)
+{
+	int[] line = sparse[i];
+
+	int row = line[0];
+	int col = line[1];
+	int val = line[2];
+
+	original[row][col] = val;
+}
+```
+
+Result of conversion:
+```
+0	0	0	0	0	0	0	0	0	0	0
+0	0	1	0	0	0	0	0	0	0	0
+0	0	0	2	0	0	0	0	0	0	0
+0	0	0	0	0	0	0	0	0	0	0
+0	0	0	0	0	0	0	0	0	0	0
+0	0	0	0	0	0	0	0	0	0	0
+0	0	0	0	0	0	0	0	0	0	0
+0	0	0	0	0	0	0	0	0	0	0
+0	0	0	0	0	0	0	0	0	0	0
+0	0	0	0	0	0	0	0	0	0	0
+0	0	0	0	0	0	0	0	0	0	0
+```

@@ -7,6 +7,7 @@ public class SparseArray
 		original[2][3] = 2;
 
 		int[][] sparseArr = toSparseArray(original);
+		original = toOriginal(sparseArr);
 	}
 
 	public static int[][] toSparseArray(int[][] original)
@@ -52,5 +53,29 @@ public class SparseArray
 		}
 
 		return sparseArr;
+	}
+
+	public static int[][] toOriginal(int[][] sparse)
+	{
+		// read top row
+		int rows = sparse[0][0];
+		int cols = sparse[0][1];
+
+		// create
+		int[][] original = new int[rows][cols];
+
+		// assign
+		for (int i = 1 ; i < sparse.length ; i++)
+		{
+			int[] line = sparse[i];
+
+			int row = line[0];
+			int col = line[1];
+			int val = line[2];
+
+			original[row][col] = val;
+		}
+
+		return original;
 	}
 }
