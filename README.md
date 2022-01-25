@@ -27,3 +27,80 @@ While the original array on the left takes 42 cells, the sparse array on the rig
 2. Create the array using the given size and fill with the default value.
 
 3. Read other rows and assign values to cells.
+
+### Code Example
+First we have a 2D int array `original` with only two valid data:
+```java
+int[][] original = new int[11][11];
+original[1][2] = 1;
+original[2][3] = 2;
+```
+
+Traverse through `original` to look for total number of valid data:
+```java
+int sum = 0;
+
+for (int[] row : original)
+{
+	for (int val : row)
+	{
+		if (val != 0) sum++;
+	}
+}
+```
+
+Create sparse array using `sum`:
+```java
+int[][] sparseArr = new int[sum + 1][3];
+```
+
+Assign info of `original` to top row:
+```java
+sparseArr[0][0] = original.length;
+sparseArr[0][1] = original[0].length;
+sparseArr[0][2] = sum;
+```
+
+Traverse through `original` again, this time for assigning values:
+```java
+int count = 1; // specifies row in $sparseArr
+for (int row = 0 ; row < original.length ; row++)
+{
+	for (int col = 0 ; col < original[row].length ; col++)
+	{
+		int val = original[row][col];
+
+		if (val != 0)
+		{
+			sparseArr[count][0] = row;
+			sparseArr[count][1] = col;
+			sparseArr[count][2] = val;
+			count++;
+		}
+
+		if (count == sum + 1) break;
+		// last row reached -> all valid data assigned, no need to continue
+	}
+}
+```
+
+Comparison of original array and sparse array:</br>
+```
+-- original --
+0	0	0	0	0	0	0	0	0	0	0
+0	0	1	0	0	0	0	0	0	0	0
+0	0	0	2	0	0	0	0	0	0	0
+0	0	0	0	0	0	0	0	0	0	0
+0	0	0	0	0	0	0	0	0	0	0
+0	0	0	0	0	0	0	0	0	0	0
+0	0	0	0	0	0	0	0	0	0	0
+0	0	0	0	0	0	0	0	0	0	0
+0	0	0	0	0	0	0	0	0	0	0
+0	0	0	0	0	0	0	0	0	0	0
+0	0	0	0	0	0	0	0	0	0	0
+
+-- sparse --
+11   11   2
+1    2    1
+2    3    2
+```
