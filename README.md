@@ -147,3 +147,33 @@ Result of conversion:
 0	0	0	0	0	0	0	0	0	0	0
 0	0	0	0	0	0	0	0	0	0	0
 ```
+
+You can also serialise the sparse array using object stream to save to the disk:
+```java
+public static void serialise(int[][] arr , String path) throws IOException, FileNotFoundException
+{
+	FileOutputStream fout = new FileOutputStream(path);
+	ObjectOutputStream oout = new ObjectOutputStream(fout);
+
+	oout.writeObject(arr);
+
+	fout.close();
+	oout.close();
+}
+```
+
+...and restore it when to use:
+```java
+public static int[][] deserialise(String path) throws IOException, FileNotFoundException, ClassNotFoundException
+{
+	FileInputStream fin = new FileInputStream(path);
+	ObjectInputStream oin = new ObjectInputStream(fin);
+
+	Object res = oin.readObject();
+
+	fin.close();
+	oin.close();
+
+	return (int[][])res;
+}
+```

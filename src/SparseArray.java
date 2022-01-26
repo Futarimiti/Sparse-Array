@@ -1,3 +1,10 @@
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.IOException;
+import java.io.FileNotFoundException;
+
 public class SparseArray
 {
 	public static void main(String[] args)
@@ -6,8 +13,36 @@ public class SparseArray
 		original[1][2] = 1;
 		original[2][3] = 2;
 
+		// encode to sparse array
 		int[][] sparseArr = toSparseArray(original);
-		original = toOriginal(sparseArr);
+
+		// serialise sparse array to data file
+		try
+		{
+			String dest = "sparseArr.dat"; // under root
+			serialise(sparseArr , dest);
+		}
+		catch (FileNotFoundException e) {e.printStackTrace();}
+		catch (IOException e) {e.printStackTrace();}
+
+		// deserialise sparse array from data file
+		int[][] deserialisedSparseArr = null;
+		try
+		{
+			String path = "sparseArr.dat";
+			deserialisedSparseArr = deserialise(path);
+		}
+		catch (FileNotFoundException e) {e.printStackTrace();}
+		catch (ClassNotFoundException e) {e.printStackTrace();}
+		catch (IOException e) {e.printStackTrace();}
+		/*
+		11	11	2
+		1	2	1
+		2	3	2
+		*/
+
+		// decode to original array
+		int[][] decode = toOriginal(deserialisedSparseArr);
 	}
 
 	public static int[][] toSparseArray(int[][] original)
@@ -77,5 +112,29 @@ public class SparseArray
 		}
 
 		return original;
+	}
+
+	public static void serialise(int[][] arr , String path) throws IOException, FileNotFoundException
+	{
+		FileOutputStream fout = new FileOutputStream(path);
+		ObjectOutputStream oout = new ObjectOutputStream(fout);
+
+		oout.writeObject(arr);
+
+		fout.close();
+		oout.close();
+	}
+
+	public static int[][] deserialise(String path) throws IOException, FileNotFoundException, ClassNotFoundException
+	{
+		FileInputStream fin = new FileInputStream(path);
+		ObjectInputStream oin = new ObjectInputStream(fin);
+
+		Object res = oin.readObject();
+
+		fin.close();
+		oin.close();
+
+		return (int[][])res;
 	}
 }
